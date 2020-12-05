@@ -4,12 +4,14 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.model.DocumentSummary;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.NonNull;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * a document
@@ -18,8 +20,20 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-12-05T07:54:55.839Z[GMT]")
 
+public class Document {
+  @Id
+  @NonNull
+  @JsonProperty("documentId")
+  private String documentId;
 
-public class Document extends DocumentSummary  {
+  @CreatedDate
+  @JsonProperty("created")
+  private OffsetDateTime created;
+
+  @LastModifiedDate
+  @JsonProperty("updated")
+  private OffsetDateTime updated;
+
   @JsonProperty("creator")
   private String creator = null;
 
@@ -28,6 +42,9 @@ public class Document extends DocumentSummary  {
 
   @JsonProperty("body")
   private String body = null;
+
+  @JsonProperty("title")
+  private String title = null;
 
   /**
    * statut du document
@@ -138,49 +155,115 @@ public class Document extends DocumentSummary  {
     this.status = status;
   }
 
+  public Document documentId(String documentId) {
+    this.documentId = documentId;
+    return this;
+  }
+
+  /**
+   * identifiant du document
+   * @return documentId
+   **/
+  @Schema(description = "identifiant du document")
+
+  public String getDocumentId() {
+    return documentId;
+  }
+
+  public void setDocumentId(String documentId) {
+    this.documentId = documentId;
+  }
+
+  public Document created(OffsetDateTime created) {
+    this.created = created;
+    return this;
+  }
+
+  /**
+   * la date de création
+   * @return created
+   **/
+  @Schema(description = "la date de création")
+
+  @Valid
+  public OffsetDateTime getCreated() {
+    return created;
+  }
+
+  public void setCreated(OffsetDateTime created) {
+    this.created = created;
+  }
+
+  public Document updated(OffsetDateTime updated) {
+    this.updated = updated;
+    return this;
+  }
+
+  /**
+   * date de la mise à jour
+   * @return updated
+   **/
+  @Schema(description = "date de la mise à jour")
+
+  @Valid
+  public OffsetDateTime getUpdated() {
+    return updated;
+  }
+
+  public void setUpdated(OffsetDateTime updated) {
+    this.updated = updated;
+  }
+
+  public Document title(String title) {
+    this.title = title;
+    return this;
+  }
+
+  /**
+   * titre du document
+   * @return title
+   **/
+  @Schema(description = "titre du document")
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
   @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     Document document = (Document) o;
-    return Objects.equals(this.creator, document.creator) &&
-        Objects.equals(this.editor, document.editor) &&
-        Objects.equals(this.body, document.body) &&
-        Objects.equals(this.status, document.status) &&
-        super.equals(o);
+    return Objects.equals(creator, document.creator) &&
+            Objects.equals(editor, document.editor) &&
+            Objects.equals(body, document.body) &&
+            Objects.equals(documentId, document.documentId) &&
+            Objects.equals(created, document.created) &&
+            Objects.equals(updated, document.updated) &&
+            Objects.equals(title, document.title) &&
+            status == document.status;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(creator, editor, body, status, super.hashCode());
+    return Objects.hash(creator, editor, body, documentId, created, updated, title, status);
   }
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Document {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    creator: ").append(toIndentedString(creator)).append("\n");
-    sb.append("    editor: ").append(toIndentedString(editor)).append("\n");
-    sb.append("    body: ").append(toIndentedString(body)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return "Document{" +
+            "creator='" + creator + '\'' +
+            ", editor='" + editor + '\'' +
+            ", body='" + body + '\'' +
+            ", documentId='" + documentId + '\'' +
+            ", created=" + created +
+            ", updated=" + updated +
+            ", title='" + title + '\'' +
+            ", status=" + status +
+            '}';
   }
 }

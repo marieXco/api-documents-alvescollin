@@ -48,6 +48,7 @@ public class DocumentsApiController implements DocumentsApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             Document document = documentService.getDocument(documentId);
+            System.out.println(document);
             return new ResponseEntity<Document>(document, HttpStatus.NOT_IMPLEMENTED);
         }
 
@@ -89,7 +90,7 @@ public class DocumentsApiController implements DocumentsApi {
 
     // ----------------------------- update a document by id -----------------------------
     public ResponseEntity<Document> documentsDocumentIdPut(@Parameter(in = ParameterIn.PATH, description = "identifiant du document à récupérer", required=true, schema=@Schema()) @PathVariable("documentId") String documentId,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Document body) {
-        Document document = documentService.updateDocument(body);
+        Document document = documentService.updateDocument(documentId,body);
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             return new ResponseEntity<Document>(document, HttpStatus.NOT_IMPLEMENTED);

@@ -1,11 +1,9 @@
 package io.swagger.service;
 
-import io.swagger.api.NotFoundException;
 import io.swagger.model.Document;
 import io.swagger.model.DocumentSummary;
 import io.swagger.model.DocumentsList;
 import io.swagger.repository.DocumentRepository;
-import io.swagger.repository.DocumentSummaryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,16 +17,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DocumentService {
     private final DocumentRepository documentRepository;
-    private final DocumentSummaryRepository documentSummaryRepository;
 
     public DocumentsList createDocument(Document document){
+        document.setStatus(Document.StatusEnum.CREATED);
         Document insertedDocument = documentRepository.insert(document);
 
         // Create a documentSummary for this document
-        DocumentSummary documentSummary = documentSummaryRepository.insert(summarize(document));
+        DocumentSummary documentSummary = summarize(document);
 
         List<DocumentSummary> listsummary = new ArrayList<DocumentSummary>();
         listsummary.add(documentSummary);
+
 
         // Create a document list for this document
         DocumentsList documentsList = new DocumentsList();
@@ -52,19 +51,13 @@ public class DocumentService {
     }
 
     public Document getDocument(String id){
-        System.out.println("jlkj" + id);
         return documentRepository.findById(id).orElse(null);
     }
 
-    public Document updateDocument(Document updatedocument){
-        Document document = getDocument(updatedocument.getDocumentId());
-        document.setBody(updatedocument.getBody());
-        document.setCreator(updatedocument.getCreator());
-        document.setEditor(updatedocument.getEditor());
-        document.setStatus(updatedocument.getStatus());
-        document.setCreated(updatedocument.getCreated());
-        document.setTitle(updatedocument.getTitle());
-        document.setUpdated(updatedocument.getUpdated());
+    public Document updateDocument(String id, Document updatedocument){
+        Document document = getDocument(id);
+        if(!updatedocument.getBody().equals(null)) document.setBody(updatedocument.getBody());
+        if(!updatedocument.getTitle().equals(null)) document.setTitle(updatedocument.getTitle());
         return documentRepository.save(document);
 
     }
@@ -77,11 +70,10 @@ public class DocumentService {
     }
 
     public DocumentSummary summarize(Document document){
-        DocumentSummary documentSummary = new DocumentSummary();
-        documentSummary.setCreated(document.getCreated());
-        documentSummary.setDocumentId(document.getDocumentId());
-        documentSummary.setUpdated(document.getUpdated());
-        documentSummary.setTitle(document.getTitle());
+        DocumentSummary documentSummary = new DocumentSummary(document.getDocumentId(),
+                document.getCreated(),
+                document.getUpdated(),
+                document.getTitle());
         return documentSummary;
     }
 }

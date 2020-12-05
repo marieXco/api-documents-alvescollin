@@ -2,12 +2,10 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * résumé d&#x27;un document
@@ -30,6 +28,13 @@ public class DocumentSummary   {
   @JsonProperty("title")
   private String title = null;
 
+  public DocumentSummary(String documentId, OffsetDateTime created, OffsetDateTime updated, String title) {
+    this.documentId = documentId;
+    this.created = created;
+    this.updated = updated;
+    this.title = title;
+  }
+
   public DocumentSummary documentId(String documentId) {
     this.documentId = documentId;
     return this;
@@ -41,7 +46,7 @@ public class DocumentSummary   {
    **/
   @Schema(description = "identifiant du document")
   
-    public String getDocumentId() {
+  public String getDocumentId() {
     return documentId;
   }
 
