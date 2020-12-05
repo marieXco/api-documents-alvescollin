@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import io.swagger.dto.DocumentDto;
 import io.swagger.model.Document;
 import io.swagger.model.DocumentsList;
 import io.swagger.model.Lock;
@@ -117,13 +118,14 @@ public class DocumentsApiController implements DocumentsApi {
     }
 
     // ----------------------------- create new document -----------------------------
-    public ResponseEntity<DocumentsList> documentsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Document body) {
+    public ResponseEntity<DocumentDto> documentsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody DocumentDto body) {
         String accept = request.getHeader("Accept");
-        DocumentsList createdDocument = documentService.createDocument(body);
+        Document createdDocument = documentService.createDocument(body.toEntity());
+        DocumentDto createdTweetDto = createdDocument.toDto();
         if (accept != null && accept.contains("application/json")) {
-            return new ResponseEntity<DocumentsList>(createdDocument, HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<DocumentDto>(createdTweetDto, HttpStatus.NOT_IMPLEMENTED);
         }
-        return new ResponseEntity<DocumentsList>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<DocumentDto>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

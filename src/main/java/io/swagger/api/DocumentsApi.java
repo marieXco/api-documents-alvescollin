@@ -5,6 +5,7 @@
  */
 package io.swagger.api;
 
+import io.swagger.dto.DocumentDto;
 import io.swagger.model.Document;
 import io.swagger.model.DocumentsList;
 import io.swagger.model.ErrorDefinition;
@@ -129,14 +130,14 @@ public interface DocumentsApi {
     @Operation(summary = "Crée un document", description = "", security = {
         @SecurityRequirement(name = "basicAuth")    }, tags={ "documents" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "The document created", content = @Content(schema = @Schema(implementation = DocumentsList.class))),
+        @ApiResponse(responseCode = "201", description = "The document created", content = @Content(schema = @Schema(implementation = DocumentDto.class))),
         
         @ApiResponse(responseCode = "200", description = "unexpected error", content = @Content(schema = @Schema(implementation = ErrorDefinition.class))) })
     @RequestMapping(value = "/documents",
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<DocumentsList> documentsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Document body);
+    ResponseEntity<DocumentDto> documentsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody DocumentDto body);
 
 }
 

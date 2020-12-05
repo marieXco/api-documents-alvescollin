@@ -18,7 +18,7 @@ import java.util.List;
 public class DocumentService {
     private final DocumentRepository documentRepository;
 
-    public DocumentsList createDocument(Document document){
+    public Document createDocument(Document document){
         document.setStatus(Document.StatusEnum.CREATED);
         Document insertedDocument = documentRepository.insert(document);
 
@@ -28,11 +28,7 @@ public class DocumentService {
         List<DocumentSummary> listsummary = new ArrayList<DocumentSummary>();
         listsummary.add(documentSummary);
 
-
-        // Create a document list for this document
-        DocumentsList documentsList = new DocumentsList();
-        documentsList.setData(listsummary);
-        return documentsList;
+        return document;
     }
 
     public DocumentsList getAll(){

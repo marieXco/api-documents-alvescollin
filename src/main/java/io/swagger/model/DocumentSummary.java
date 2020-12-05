@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,20 +16,20 @@ import javax.validation.Valid;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-12-05T07:54:55.839Z[GMT]")
 
 
-public class DocumentSummary   {
+public class DocumentSummary {
   @JsonProperty("documentId")
   private String documentId = null;
 
   @JsonProperty("created")
-  private OffsetDateTime created = null;
+  private LocalDateTime created = null;
 
   @JsonProperty("updated")
-  private OffsetDateTime updated = null;
+  private LocalDateTime updated = null;
 
   @JsonProperty("title")
   private String title = null;
 
-  public DocumentSummary(String documentId, OffsetDateTime created, OffsetDateTime updated, String title) {
+  public DocumentSummary(String documentId, LocalDateTime created, LocalDateTime updated, String title) {
     this.documentId = documentId;
     this.created = created;
     this.updated = updated;
@@ -54,7 +55,7 @@ public class DocumentSummary   {
     this.documentId = documentId;
   }
 
-  public DocumentSummary created(OffsetDateTime created) {
+  public DocumentSummary created(LocalDateTime created) {
     this.created = created;
     return this;
   }
@@ -66,15 +67,15 @@ public class DocumentSummary   {
   @Schema(description = "la date de création")
   
     @Valid
-    public OffsetDateTime getCreated() {
+    public LocalDateTime getCreated() {
     return created;
   }
 
-  public void setCreated(OffsetDateTime created) {
+  public void setCreated(LocalDateTime created) {
     this.created = created;
   }
 
-  public DocumentSummary updated(OffsetDateTime updated) {
+  public DocumentSummary updated(LocalDateTime updated) {
     this.updated = updated;
     return this;
   }
@@ -86,11 +87,11 @@ public class DocumentSummary   {
   @Schema(description = "date de la mise à jour")
   
     @Valid
-    public OffsetDateTime getUpdated() {
+    public LocalDateTime getUpdated() {
     return updated;
   }
 
-  public void setUpdated(OffsetDateTime updated) {
+  public void setUpdated(LocalDateTime updated) {
     this.updated = updated;
   }
 
