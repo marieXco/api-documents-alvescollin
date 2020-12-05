@@ -1,68 +1,47 @@
 package io.swagger.model;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.dto.DocumentDto;
-import io.swagger.utils.RestUtils;
-import io.swagger.v3.oas.annotations.media.Schema;
-import javafx.scene.control.PopupControlBuilder;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.PersistenceConstructor;
-import org.threeten.bp.OffsetDateTime;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.annotation.Generated;
 
-/**
- * a document
- */
 
 @Builder
-@Schema(description = "a document")
-@Validated
-@Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-12-05T07:54:55.839Z[GMT]")
 @Data
 @org.springframework.data.mongodb.core.mapping.Document
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Document {
+
   @Id
-  @NonNull
-  @JsonProperty("documentId")
+  // WARNING : @NotNull
   private String documentId;
 
   @CreatedDate
-  @JsonProperty("created")
   private LocalDateTime created;
 
   @LastModifiedDate
-  @JsonProperty("updated")
   private LocalDateTime updated;
 
-  @JsonProperty("creator")
-  private String creator = null;
+  private String creator;
 
-  @JsonProperty("editor")
-  private String editor = null;
+  private String editor;
 
-  @JsonProperty("body")
-  private String body = null;
+  private String body;
 
-  @JsonProperty("title")
-  private String title = null;
+  private String title;
 
-  /**
-   * statut du document
-   */
+  private StatusEnum status;
+
   public enum StatusEnum {
     CREATED("CREATED"),
-    
+
     VALIDATED("VALIDATED");
 
     private String value;
@@ -87,8 +66,14 @@ public class Document {
       return null;
     }
   }
-  @JsonProperty("status")
-  private StatusEnum status = null;
+
+  public void setStatus(StatusEnum status) {
+    this.status = status;
+  }
+
+  public StatusEnum getStatus() {
+    return status;
+  }
 
   @Override
   public String toString() {
@@ -111,8 +96,9 @@ public class Document {
             .editor(editor)
             .body(body)
             .title(title)
-            .created(RestUtils.convertToZoneDateTime(created))
-            .updated(RestUtils.convertToZoneDateTime(updated))
+            .created(created)
+            .updated(updated)
             .build();
   }
+
 }

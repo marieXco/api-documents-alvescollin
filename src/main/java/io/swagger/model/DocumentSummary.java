@@ -1,33 +1,15 @@
 package io.swagger.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import java.time.LocalDateTime;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.threeten.bp.OffsetDateTime;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
 
-/**
- * résumé d&#x27;un document
- */
-@Schema(description = "résumé d'un document")
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-12-05T07:54:55.839Z[GMT]")
-
-
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class DocumentSummary {
-  @JsonProperty("documentId")
-  private String documentId = null;
-
-  @JsonProperty("created")
-  private LocalDateTime created = null;
-
-  @JsonProperty("updated")
-  private LocalDateTime updated = null;
-
-  @JsonProperty("title")
-  private String title = null;
+  private String documentId;
+  private LocalDateTime created;
+  private LocalDateTime updated;
+  private String title;
 
   public DocumentSummary(String documentId, LocalDateTime created, LocalDateTime updated, String title) {
     this.documentId = documentId;
@@ -36,126 +18,13 @@ public class DocumentSummary {
     this.title = title;
   }
 
-  public DocumentSummary documentId(String documentId) {
-    this.documentId = documentId;
-    return this;
-  }
-
-  /**
-   * identifiant du document
-   * @return documentId
-   **/
-  @Schema(description = "identifiant du document")
-  
-  public String getDocumentId() {
-    return documentId;
-  }
-
-  public void setDocumentId(String documentId) {
-    this.documentId = documentId;
-  }
-
-  public DocumentSummary created(LocalDateTime created) {
-    this.created = created;
-    return this;
-  }
-
-  /**
-   * la date de création
-   * @return created
-   **/
-  @Schema(description = "la date de création")
-  
-    @Valid
-    public LocalDateTime getCreated() {
-    return created;
-  }
-
-  public void setCreated(LocalDateTime created) {
-    this.created = created;
-  }
-
-  public DocumentSummary updated(LocalDateTime updated) {
-    this.updated = updated;
-    return this;
-  }
-
-  /**
-   * date de la mise à jour
-   * @return updated
-   **/
-  @Schema(description = "date de la mise à jour")
-  
-    @Valid
-    public LocalDateTime getUpdated() {
-    return updated;
-  }
-
-  public void setUpdated(LocalDateTime updated) {
-    this.updated = updated;
-  }
-
-  public DocumentSummary title(String title) {
-    this.title = title;
-    return this;
-  }
-
-  /**
-   * titre du document
-   * @return title
-   **/
-  @Schema(description = "titre du document")
-  
-    public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    DocumentSummary documentSummary = (DocumentSummary) o;
-    return Objects.equals(this.documentId, documentSummary.documentId) &&
-        Objects.equals(this.created, documentSummary.created) &&
-        Objects.equals(this.updated, documentSummary.updated) &&
-        Objects.equals(this.title, documentSummary.title);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(documentId, created, updated, title);
-  }
-
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class DocumentSummary {\n");
-    
-    sb.append("    documentId: ").append(toIndentedString(documentId)).append("\n");
-    sb.append("    created: ").append(toIndentedString(created)).append("\n");
-    sb.append("    updated: ").append(toIndentedString(updated)).append("\n");
-    sb.append("    title: ").append(toIndentedString(title)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return "DocumentSummary{" +
+            "documentId='" + documentId + '\'' +
+            ", created=" + created +
+            ", updated=" + updated +
+            ", title='" + title + '\'' +
+            '}';
   }
 }

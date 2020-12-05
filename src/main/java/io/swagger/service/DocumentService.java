@@ -4,6 +4,7 @@ import io.swagger.model.Document;
 import io.swagger.model.DocumentSummary;
 import io.swagger.model.DocumentsList;
 import io.swagger.repository.DocumentRepository;
+import io.swagger.utils.DocumentUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class DocumentService {
         Document insertedDocument = documentRepository.insert(document);
 
         // Create a documentSummary for this document
-        DocumentSummary documentSummary = summarize(document);
+        DocumentSummary documentSummary = DocumentUtils.summarize(document);
 
         List<DocumentSummary> listsummary = new ArrayList<DocumentSummary>();
         listsummary.add(documentSummary);
@@ -39,7 +40,7 @@ public class DocumentService {
         Iterator<Document> iter = documents.iterator();
         while (iter.hasNext()) {
             Document doc = iter.next();
-            documentSummaryList.add(this.summarize(doc));
+            documentSummaryList.add(DocumentUtils.summarize(doc));
             i++;
         }
         documentsList.setData(documentSummaryList);
@@ -58,18 +59,11 @@ public class DocumentService {
 
     }
 
-    public void updateStatus(String id, Document.StatusEnum status){
+    public Document updateStatus(String id, Document.StatusEnum status){
         Document document = getDocument(id);
         document.setStatus(status);
-        documentRepository.save(document);
-        //return document.getStatus().toString();
-    }
-
-    public DocumentSummary summarize(Document document){
-        DocumentSummary documentSummary = new DocumentSummary(document.getDocumentId(),
-                document.getCreated(),
-                document.getUpdated(),
-                document.getTitle());
-        return documentSummary;
+        System.out.println(document.getStatus());
+        System.out.println(document);
+        return documentRepository.save(document);
     }
 }

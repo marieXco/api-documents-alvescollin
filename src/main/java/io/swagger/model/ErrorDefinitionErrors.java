@@ -2,11 +2,7 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * ErrorDefinitionErrors
@@ -31,7 +27,6 @@ public class ErrorDefinitionErrors   {
    * le code de l'erreur
    * @return errorCode
    **/
-  @Schema(description = "le code de l'erreur")
   
     public String getErrorCode() {
     return errorCode;
@@ -50,7 +45,6 @@ public class ErrorDefinitionErrors   {
    * message d'erreur
    * @return errorMessage
    **/
-  @Schema(description = "message d'erreur")
   
     public String getErrorMessage() {
     return errorMessage;

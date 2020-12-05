@@ -1,18 +1,14 @@
 package io.swagger.model;
 
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * un verrou
  */
-@Schema(description = "un verrou")
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-12-05T07:54:55.839Z[GMT]")
 
@@ -33,7 +29,6 @@ public class Lock   {
    * utilisateur propriétaire du verrou
    * @return owner
    **/
-  @Schema(description = "utilisateur propriétaire du verrou")
   
     public String getOwner() {
     return owner;
@@ -52,7 +47,6 @@ public class Lock   {
    * date de la pose du verrou
    * @return created
    **/
-  @Schema(description = "date de la pose du verrou")
   
     @Valid
     public OffsetDateTime getCreated() {

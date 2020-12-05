@@ -2,19 +2,11 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * objet générique pour les résultats de recherche
  */
-@Schema(description = "objet générique pour les résultats de recherche")
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-12-05T07:54:55.839Z[GMT]")
-
 
 public class PageData   {
   @JsonProperty("page")
@@ -32,7 +24,6 @@ public class PageData   {
    * le numéro de la page courante
    * @return page
    **/
-  @Schema(description = "le numéro de la page courante")
   
     public Integer getPage() {
     return page;
@@ -51,7 +42,6 @@ public class PageData   {
    * le nombre total d'element
    * @return nbElements
    **/
-  @Schema(description = "le nombre total d'element")
   
     public Integer getNbElements() {
     return nbElements;
