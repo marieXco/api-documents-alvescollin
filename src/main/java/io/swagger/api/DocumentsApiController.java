@@ -1,10 +1,12 @@
 package io.swagger.api;
 
 import io.swagger.dto.DocumentDto;
+import io.swagger.dto.LockDto;
 import io.swagger.model.Document;
 import io.swagger.model.DocumentsList;
 import io.swagger.model.Lock;
 import io.swagger.service.DocumentService;
+import io.swagger.service.LockService;
 import io.swagger.utils.RestUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +23,13 @@ public class DocumentsApiController {
 
     private final HttpServletRequest request;
     public DocumentService documentService;
+    public LockService lockService;
 
+    /*
+     * Document functions
+     */
 
-    // ----------------------------- Get a document by id -----------------------------
+    // GET A DOCUMENT
     @RequestMapping(value = "/documents/{documentId}", produces = { "application/json" }, method = RequestMethod.GET)
     public ResponseEntity<Document> documentsDocumentIdGet(@PathVariable("documentId") String documentId) {
 
@@ -35,7 +41,7 @@ public class DocumentsApiController {
         return new ResponseEntity<Document>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    // ----------------------------- Update a document by id -----------------------------
+    // PUT DOCUMENT
     @RequestMapping(value = "/documents/{documentId}", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.PUT)
     public ResponseEntity<DocumentDto> documentsDocumentIdPut(@PathVariable("documentId") String documentId, @RequestBody DocumentDto body) {
 
@@ -53,7 +59,7 @@ public class DocumentsApiController {
         return new ResponseEntity<DocumentDto>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    // ----------------------------- Update status of document by id -----------------------------
+    // PUT DOCUMENT STATUS
     @RequestMapping(value = "/documents/{documentId}/status", produces = { "application/json" }, consumes = { "text/plain" }, method = RequestMethod.PUT)
     public ResponseEntity<Void> documentsDocumentIdStatusPut(@PathVariable("documentId") String documentId, @RequestBody String body) {
 
@@ -69,7 +75,7 @@ public class DocumentsApiController {
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    // ----------------------------- Get all documents -----------------------------
+    // GET DOCUMENTS
     @RequestMapping(value = "/documents", produces = { "application/json" }, method = RequestMethod.GET)
     public ResponseEntity<DocumentsList> documentsGet(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "pageSize", required = false) Integer pageSize) {
 
@@ -81,7 +87,7 @@ public class DocumentsApiController {
         return new ResponseEntity<DocumentsList>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    // ----------------------------- Create new document -----------------------------
+    // POST DOCUMENT
     @RequestMapping(value = "/documents", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
     public ResponseEntity<DocumentDto> documentsPost(@RequestBody DocumentDto body) {
 
@@ -97,41 +103,40 @@ public class DocumentsApiController {
     /*
      * Lock functions
      */
+
+    // DELETE LOCK
     @RequestMapping(value = "/documents/{documentId}/lock", produces = { "application/json" }, method = RequestMethod.DELETE)
-    public ResponseEntity<Void> documentsDocumentIdLockDelete(@PathVariable("documentId") String documentId) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Boolean> documentsDocumentIdLockDelete(@PathVariable("documentId") String documentId) {
+        if (RestUtils.isJson(request)) {
+            // TODO : delete lock if user is the writter
+            Boolean deleted = lockService.deleteLockOnDocument(documentId);
+            if(deleted) return new ResponseEntity<Boolean>(deleted,HttpStatus.OK);
+        }
+        return new ResponseEntity<Boolean>(HttpStatus.NOT_IMPLEMENTED);
     }
 
+    // GET LOCK
     @RequestMapping(value = "/documents/{documentId}/lock", produces = { "application/json" }, method = RequestMethod.GET)
-    public ResponseEntity<Lock> documentsDocumentIdLockGet(@PathVariable("documentId") String documentId) {
+    public ResponseEntity<LockDto> documentsDocumentIdLockGet(@PathVariable("documentId") String documentId) {
         if (RestUtils.isJson(request)) {
-            /*try {
-                return null;
-                //return new ResponseEntity<Lock>(objectMapper.readValue("{\n  \"owner\" : \"owner\",\n  \"created\" : \"2000-01-23T04:56:07.000+00:00\"\n}", Lock.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Lock>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }*/
-            return null;
+            Lock getLock = lockService.getLock(documentId);
+            LockDto lockDto = getLock.toDto();
+            return new ResponseEntity<LockDto>(lockDto, HttpStatus.FOUND);
         }
 
-        return new ResponseEntity<Lock>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<LockDto>(HttpStatus.NOT_IMPLEMENTED);
     }
 
+    // PUT LOCK
     @RequestMapping(value = "/documents/{documentId}/lock", produces = { "application/json" }, method = RequestMethod.PUT)
-    public ResponseEntity<Lock> documentsDocumentIdLockPut(@PathVariable("documentId") String documentId) {
+    public ResponseEntity<LockDto> documentsDocumentIdLockPut(@PathVariable("documentId") String documentId) {
         if (RestUtils.isJson(request)) {
-            /*try {
-                return new ResponseEntity<Lock>(objectMapper.readValue("{\n  \"owner\" : \"owner\",\n  \"created\" : \"2000-01-23T04:56:07.000+00:00\"\n}", Lock.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Lock>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }*/
-            return null;
+            // TODO : Update Lock if user is writter
+            Lock addedLock = lockService.addLockOnDocument(documentId);
+            LockDto lockDto = addedLock.toDto();
+            return new ResponseEntity<LockDto>(lockDto, HttpStatus.CREATED);
         }
-
-        return new ResponseEntity<Lock>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<LockDto>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

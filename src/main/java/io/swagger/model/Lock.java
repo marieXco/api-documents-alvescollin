@@ -1,100 +1,44 @@
 package io.swagger.model;
 
-import java.time.OffsetDateTime;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+import java.time.LocalDateTime;
 
-/**
- * un verrou
- */
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-12-05T07:54:55.839Z[GMT]")
+import io.swagger.dto.LockDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
+import javax.validation.constraints.NotNull;
 
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Lock   {
-  @JsonProperty("owner")
-  private String owner = null;
 
-  @JsonProperty("created")
-  private OffsetDateTime created = null;
+  @NotNull
+  private String documentId;
 
-  public Lock owner(String owner) {
-    this.owner = owner;
-    return this;
-  }
+  @NotNull
+  private String owner;
 
-  /**
-   * utilisateur propriétaire du verrou
-   * @return owner
-   **/
-  
-    public String getOwner() {
-    return owner;
-  }
-
-  public void setOwner(String owner) {
-    this.owner = owner;
-  }
-
-  public Lock created(OffsetDateTime created) {
-    this.created = created;
-    return this;
-  }
-
-  /**
-   * date de la pose du verrou
-   * @return created
-   **/
-  
-    @Valid
-    public OffsetDateTime getCreated() {
-    return created;
-  }
-
-  public void setCreated(OffsetDateTime created) {
-    this.created = created;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Lock lock = (Lock) o;
-    return Objects.equals(this.owner, lock.owner) &&
-        Objects.equals(this.created, lock.created);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(owner, created);
-  }
+  @CreatedDate
+  private LocalDateTime created;
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Lock {\n");
-    
-    sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
-    sb.append("    created: ").append(toIndentedString(created)).append("\n");
-    sb.append("}");
-    return sb.toString();
+    return "Lock{" +
+            "owner='" + owner + '\'' +
+            ", created=" + created +
+            '}';
   }
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+  public LockDto toDto() {
+    return LockDto.builder()
+            .documentId(documentId)
+            .owner(owner)
+            .created(created)
+            .build();
   }
 }
