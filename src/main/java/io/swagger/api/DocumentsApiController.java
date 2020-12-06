@@ -43,7 +43,11 @@ public class DocumentsApiController {
             Document updatedDocument = documentService.updateDocument(documentId, body.toEntity());
             DocumentDto updatedDocumentDto = updatedDocument.toDto();
 
-            if(!updatedDocumentDto.equals(null)) return new ResponseEntity<DocumentDto>(updatedDocumentDto, HttpStatus.OK);
+            if(updatedDocumentDto.equals(null))  {
+                return new ResponseEntity<DocumentDto>(HttpStatus.FORBIDDEN);
+            } else {
+                return new ResponseEntity<DocumentDto>(updatedDocumentDto, HttpStatus.OK);
+            }
         }
 
         return new ResponseEntity<DocumentDto>(HttpStatus.NOT_IMPLEMENTED);
@@ -54,7 +58,7 @@ public class DocumentsApiController {
     public ResponseEntity<Void> documentsDocumentIdStatusPut(@PathVariable("documentId") String documentId, @RequestBody String body) {
 
         if (RestUtils.isJson(request)) {
-            if(Document.StatusEnum.fromValue(body) == null) return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+            if(Document.StatusEnum.fromValue(body) != Document.StatusEnum.valueOf("VALIDATED")) return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 
             Document.StatusEnum bodyEnum = Document.StatusEnum.fromValue(body);
             Document document = documentService.updateStatus(documentId, bodyEnum);

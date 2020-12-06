@@ -53,17 +53,20 @@ public class DocumentService {
 
     public Document updateDocument(String id, Document updatedocument){
         Document document = getDocument(id);
-        if(!updatedocument.getBody().equals(null)) document.setBody(updatedocument.getBody());
-        if(!updatedocument.getTitle().equals(null)) document.setTitle(updatedocument.getTitle());
-        return documentRepository.save(document);
 
+        if(!document.getStatus().equals(Document.StatusEnum.valueOf("VALIDATED"))) {
+            if(!updatedocument.getBody().equals(null)) document.setBody(updatedocument.getBody());
+            if(!updatedocument.getTitle().equals(null)) document.setTitle(updatedocument.getTitle());
+
+            return documentRepository.save(document);
+        } else {
+            return null;
+        }
     }
 
     public Document updateStatus(String id, Document.StatusEnum status){
         Document document = getDocument(id);
         document.setStatus(status);
-        System.out.println(document.getStatus());
-        System.out.println(document);
         return documentRepository.save(document);
     }
 }
