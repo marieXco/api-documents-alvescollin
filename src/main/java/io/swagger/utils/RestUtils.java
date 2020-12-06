@@ -1,6 +1,7 @@
 package io.swagger.utils;
 
 import lombok.experimental.UtilityClass;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,14 +13,6 @@ import java.time.ZonedDateTime;
 @UtilityClass
 public class RestUtils {
 
-    public static LocalDateTime convertToLocalDateTime(ZonedDateTime zonedDateTime) {
-        return zonedDateTime == null ? null : zonedDateTime.toLocalDateTime();
-    }
-
-    public static ZonedDateTime convertToZoneDateTime(LocalDateTime localDateTime) {
-        return localDateTime == null ? null : localDateTime.atZone(ZoneId.systemDefault());
-    }
-
     public String getAcceptParameter(HttpServletRequest request) {
         return request.getHeader("Accept");
     }
@@ -29,4 +22,7 @@ public class RestUtils {
         return (accept != null && accept.contains("application/json"));
     }
 
+    public String returnLoggedUser() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
 }

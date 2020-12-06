@@ -5,6 +5,7 @@ import io.swagger.dto.LockDto;
 import io.swagger.model.Document;
 import io.swagger.model.DocumentsList;
 import io.swagger.model.Lock;
+import io.swagger.service.AddLockService;
 import io.swagger.service.DocumentService;
 import io.swagger.service.LockService;
 import io.swagger.utils.RestUtils;
@@ -24,6 +25,7 @@ public class DocumentsApiController {
     private final HttpServletRequest request;
     public DocumentService documentService;
     public LockService lockService;
+    public AddLockService addLockService;
 
     /*
      * Document functions
@@ -47,12 +49,11 @@ public class DocumentsApiController {
 
         if (RestUtils.isJson(request)) {
             Document updatedDocument = documentService.updateDocument(documentId, body.toEntity());
-            DocumentDto updatedDocumentDto = updatedDocument.toDto();
-
-            if(updatedDocumentDto.equals(null))  {
-                return new ResponseEntity<DocumentDto>(HttpStatus.FORBIDDEN);
-            } else {
+            try {
+                DocumentDto updatedDocumentDto = updatedDocument.toDto();
                 return new ResponseEntity<DocumentDto>(updatedDocumentDto, HttpStatus.OK);
+            } catch(NullPointerException e) {
+                return new ResponseEntity<DocumentDto>(HttpStatus.FORBIDDEN);
             }
         }
 
@@ -109,7 +110,7 @@ public class DocumentsApiController {
     public ResponseEntity<Boolean> documentsDocumentIdLockDelete(@PathVariable("documentId") String documentId) {
         if (RestUtils.isJson(request)) {
             // TODO : delete lock if user is the writter
-            Boolean deleted = lockService.deleteLockOnDocument(documentId);
+            Boolean deleted = lockService.deleteLockOnDocument(documentId, RestUtils.returnLoggedUser());
             if(deleted) return new ResponseEntity<Boolean>(deleted,HttpStatus.OK);
         }
         return new ResponseEntity<Boolean>(HttpStatus.NOT_IMPLEMENTED);
@@ -132,7 +133,7 @@ public class DocumentsApiController {
     public ResponseEntity<LockDto> documentsDocumentIdLockPut(@PathVariable("documentId") String documentId) {
         if (RestUtils.isJson(request)) {
             // TODO : Update Lock if user is writter
-            Lock addedLock = lockService.addLockOnDocument(documentId);
+            Lock addedLock = addLockService.addLockOnDocument(documentId, RestUtils.returnLoggedUser());
             LockDto lockDto = addedLock.toDto();
             return new ResponseEntity<LockDto>(lockDto, HttpStatus.CREATED);
         }

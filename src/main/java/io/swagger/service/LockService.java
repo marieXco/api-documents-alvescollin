@@ -13,27 +13,18 @@ import org.springframework.stereotype.Service;
 public class LockService {
     private final LockRepository lockRepository;
 
-    public Lock addLockOnDocument(String documentId){
-        // TODO : verify owner = user
-        //  + add user as owner +
-        Lock lock = new Lock();
-        lock.setDocumentId(documentId);
-        return lockRepository.insert(lock);
-    }
-
     public Lock getLock(String documentId){
-        // TODO : verify owner = user
-        return lockRepository.findLockByDocumentId(documentId);
+        Lock lockFound = lockRepository.findLockByDocumentId(documentId);
+        return lockFound;
     }
 
-    public Boolean deleteLockOnDocument(String documentId){
-        // TODO : verify owner = user
-        lockRepository.deleteLockByDocumentId(documentId);
-        try {
-            getLock(documentId).equals(null);
-        } catch(NullPointerException e) {
-            return true;
+    public Boolean deleteLockOnDocument(String documentId, String user){
+        Lock lockFound = getLock(documentId);
+        if(lockFound.getOwner().equals(user)) {
+            lockRepository.deleteLockByDocumentId(documentId);
+            if(getLock(documentId).equals(null)) return true;
         }
+
         return false;
     }
 

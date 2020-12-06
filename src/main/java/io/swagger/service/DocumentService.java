@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DocumentService {
     private final DocumentRepository documentRepository;
+    private final LockService lockService;
 
     public Document createDocument(Document document){
         document.setStatus(Document.StatusEnum.CREATED);
@@ -54,7 +55,7 @@ public class DocumentService {
     public Document updateDocument(String id, Document updatedocument){
         Document document = getDocument(id);
 
-        if(!document.getStatus().equals(Document.StatusEnum.valueOf("VALIDATED"))) {
+        if(!document.getStatus().equals(Document.StatusEnum.valueOf("VALIDATED")) && lockService.getLock(id).equals(null)) {
             if(!updatedocument.getBody().equals(null)) document.setBody(updatedocument.getBody());
             if(!updatedocument.getTitle().equals(null)) document.setTitle(updatedocument.getTitle());
 
