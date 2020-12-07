@@ -1,28 +1,14 @@
 package io.swagger.model;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-
-/**
- * la description de l&#x27;erreur
- */
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-12-05T07:54:55.839Z[GMT]")
 
 
-public class ErrorDefinition   {
-  /**
-   * le type d'erreur
-   */
+public class ErrorDefinition {
+
   public enum ErrorTypeEnum {
     TECHNICAL("TECHNICAL"),
-    
+
     FUNCTIONAL("FUNCTIONAL");
 
     private String value;
@@ -32,12 +18,10 @@ public class ErrorDefinition   {
     }
 
     @Override
-    @JsonValue
     public String toString() {
       return String.valueOf(value);
     }
 
-    @JsonCreator
     public static ErrorTypeEnum fromValue(String text) {
       for (ErrorTypeEnum b : ErrorTypeEnum.values()) {
         if (String.valueOf(b.value).equals(text)) {
@@ -47,24 +31,17 @@ public class ErrorDefinition   {
       return null;
     }
   }
-  @JsonProperty("errorType")
-  private ErrorTypeEnum errorType = null;
 
-  @JsonProperty("errors")
-  @Valid
-  private List<ErrorDefinitionErrors> errors = null;
+  private ErrorTypeEnum errorType;
+  private List<ErrorDefinitionErrors> errors;
 
   public ErrorDefinition errorType(ErrorTypeEnum errorType) {
     this.errorType = errorType;
     return this;
   }
 
-  /**
-   * le type d'erreur
-   * @return errorType
-   **/
-  
-    public ErrorTypeEnum getErrorType() {
+
+  public ErrorTypeEnum getErrorType() {
     return errorType;
   }
 
@@ -85,12 +62,7 @@ public class ErrorDefinition   {
     return this;
   }
 
-  /**
-   * Get errors
-   * @return errors
-   **/
-      @Valid
-    public List<ErrorDefinitionErrors> getErrors() {
+  public List<ErrorDefinitionErrors> getErrors() {
     return errors;
   }
 
@@ -98,44 +70,11 @@ public class ErrorDefinition   {
     this.errors = errors;
   }
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    ErrorDefinition errorDefinition = (ErrorDefinition) o;
-    return Objects.equals(this.errorType, errorDefinition.errorType) &&
-        Objects.equals(this.errors, errorDefinition.errors);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(errorType, errors);
-  }
-
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class ErrorDefinition {\n");
-    
-    sb.append("    errorType: ").append(toIndentedString(errorType)).append("\n");
-    sb.append("    errors: ").append(toIndentedString(errors)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return "ErrorDefinition{" +
+            "errorType=" + errorType +
+            ", errors=" + errors +
+            '}';
   }
 }

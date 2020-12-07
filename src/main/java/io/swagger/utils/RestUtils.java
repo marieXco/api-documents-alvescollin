@@ -2,13 +2,7 @@ package io.swagger.utils;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 @UtilityClass
 public class RestUtils {

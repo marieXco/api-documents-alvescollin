@@ -1,11 +1,11 @@
 package io.swagger.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import java.time.LocalDateTime;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class DocumentSummary {
+
   private String documentId;
   private LocalDateTime created;
   private LocalDateTime updated;

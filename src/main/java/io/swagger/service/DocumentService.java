@@ -22,29 +22,33 @@ public class DocumentService {
 
     public Document createDocument(Document document){
         document.setStatus(Document.StatusEnum.CREATED);
+
         Document insertedDocument = documentRepository.insert(document);
+        DocumentSummary documentSummary = DocumentUtils.summarize(insertedDocument);
 
-        // Create a documentSummary for this document
-        DocumentSummary documentSummary = DocumentUtils.summarize(document);
-
-        List<DocumentSummary> listsummary = new ArrayList<DocumentSummary>();
-        listsummary.add(documentSummary);
+        List<DocumentSummary> documentSummaries = new ArrayList<DocumentSummary>();
+        documentSummaries.add(documentSummary);
 
         return document;
     }
 
     public DocumentsList getAll(){
         List<Document> documents = documentRepository.findAll();
-        List<DocumentSummary> documentSummaryList = new ArrayList<DocumentSummary>();
+        List<DocumentSummary> documentSummaries = new ArrayList<DocumentSummary>();
         DocumentsList documentsList = new DocumentsList();
-        int i=0;
+
+        int i = 0;
         Iterator<Document> iter = documents.iterator();
+
         while (iter.hasNext()) {
             Document doc = iter.next();
-            documentSummaryList.add(DocumentUtils.summarize(doc));
+            documentSummaries.add(DocumentUtils.summarize(doc));
             i++;
         }
-        documentsList.setData(documentSummaryList);
+
+        // TODO : gérer les pages
+        documentsList.setData(documentSummaries);
+        documentsList.setNbElements(i);
         return documentsList;
     }
 

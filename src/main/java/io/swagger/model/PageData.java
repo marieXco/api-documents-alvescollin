@@ -1,31 +1,16 @@
 package io.swagger.model;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.validation.annotation.Validated;
-
-/**
- * objet générique pour les résultats de recherche
- */
 
 public class PageData   {
-  @JsonProperty("page")
-  private Integer page = null;
-
-  @JsonProperty("nbElements")
-  private Integer nbElements = null;
+  private Integer page;
+  private Integer nbElements;
 
   public PageData page(Integer page) {
     this.page = page;
     return this;
   }
 
-  /**
-   * le numéro de la page courante
-   * @return page
-   **/
-  
-    public Integer getPage() {
+  public Integer getPage() {
     return page;
   }
 
@@ -38,12 +23,9 @@ public class PageData   {
     return this;
   }
 
-  /**
-   * le nombre total d'element
-   * @return nbElements
-   **/
-  
-    public Integer getNbElements() {
+
+
+  public Integer getNbElements() {
     return nbElements;
   }
 
@@ -53,42 +35,10 @@ public class PageData   {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    PageData pageData = (PageData) o;
-    return Objects.equals(this.page, pageData.page) &&
-        Objects.equals(this.nbElements, pageData.nbElements);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(page, nbElements);
-  }
-
-  @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class PageData {\n");
-    
-    sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    nbElements: ").append(toIndentedString(nbElements)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return "PageData{" +
+            "page=" + page +
+            ", nbElements=" + nbElements +
+            '}';
   }
 }
