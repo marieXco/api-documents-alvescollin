@@ -20,17 +20,14 @@ public class DocumentService {
     private final DocumentRepository documentRepository;
     private final LockService lockService;
 
-    public Document createDocument(Document document){
+    public DocumentSummary createDocument(Document document){
         document.setStatus(Document.StatusEnum.CREATED);
         Document insertedDocument = documentRepository.insert(document);
 
         // Create a documentSummary for this document
         DocumentSummary documentSummary = DocumentUtils.summarize(document);
-
-        List<DocumentSummary> listsummary = new ArrayList<DocumentSummary>();
-        listsummary.add(documentSummary);
-
-        return document;
+        
+        return documentSummary;
     }
 
     public DocumentsList getAll(){
@@ -54,7 +51,7 @@ public class DocumentService {
 
     public Document updateDocument(String id, Document updatedocument){
         Document document = getDocument(id);
-
+        // TODO : Ajouter editeur + try / catch
         if(!document.getStatus().equals(Document.StatusEnum.valueOf("VALIDATED")) && lockService.getLock(id).equals(null)) {
             if(!updatedocument.getBody().equals(null)) document.setBody(updatedocument.getBody());
             if(!updatedocument.getTitle().equals(null)) document.setTitle(updatedocument.getTitle());

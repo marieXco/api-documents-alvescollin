@@ -26,7 +26,7 @@ public class AddLockService {
         Document document = documentService.getDocument(documentId);
         Lock lock = new Lock();
         Lock lockFound = lockRepository.findLockByDocumentId(documentId);
-
+        // TODO : lockFound est null
         if(!document.equals(null)) {
             if(lockFound.equals(null)) {
                 lock.setOwner(user);

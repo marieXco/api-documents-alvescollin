@@ -3,6 +3,7 @@ package io.swagger.api;
 import io.swagger.dto.DocumentDto;
 import io.swagger.dto.LockDto;
 import io.swagger.model.Document;
+import io.swagger.model.DocumentSummary;
 import io.swagger.model.DocumentsList;
 import io.swagger.model.Lock;
 import io.swagger.service.AddLockService;
@@ -90,15 +91,14 @@ public class DocumentsApiController {
 
     // POST DOCUMENT
     @RequestMapping(value = "/documents", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.POST)
-    public ResponseEntity<DocumentDto> documentsPost(@RequestBody DocumentDto body) {
+    public ResponseEntity<DocumentSummary> documentsPost(@RequestBody DocumentDto body) {
 
         if (RestUtils.isJson(request)) {
-            Document createdDocument = documentService.createDocument(body.toEntity());
-            DocumentDto createdTweetDto = createdDocument.toDto();
+            DocumentSummary createdDocumentSummary = documentService.createDocument(body.toEntity());
 
-            if(!createdTweetDto.equals(null)) return new ResponseEntity<DocumentDto>(createdTweetDto, HttpStatus.CREATED);
+            if(!createdDocumentSummary.equals(null)) return new ResponseEntity<DocumentSummary>(createdDocumentSummary, HttpStatus.CREATED);
         }
-        return new ResponseEntity<DocumentDto>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<DocumentSummary>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     /*
