@@ -20,7 +20,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 public class Document {
 
   @Id
-  // WARNING : @NotNull
   private String documentId;
 
   @CreatedDate

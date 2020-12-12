@@ -1,19 +1,11 @@
 package io.swagger.service;
 
 import io.swagger.model.Document;
-import io.swagger.model.DocumentSummary;
-import io.swagger.model.DocumentsList;
 import io.swagger.model.Lock;
-import io.swagger.repository.DocumentRepository;
 import io.swagger.repository.LockRepository;
-import io.swagger.utils.DocumentUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 @Slf4j
 @Service
