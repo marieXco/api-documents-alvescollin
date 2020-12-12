@@ -1,7 +1,6 @@
 package io.swagger.api;
 
 import io.swagger.dto.DocumentDto;
-import io.swagger.errors.CustomNotFoundException;
 import io.swagger.model.*;
 import io.swagger.service.AddLockService;
 import io.swagger.service.DocumentService;
@@ -13,9 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -42,26 +38,25 @@ public class DocumentApiController {
 
     // PUT DOCUMENT
     @RequestMapping(value = "/documents/{documentId}", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.PUT)
-    public ResponseEntity<DocumentDto> documentsDocumentIdPut(@PathVariable("documentId") String documentId, @RequestBody DocumentDto body) throws CustomNotFoundException {
+    public ResponseEntity<DocumentDto> documentsDocumentIdPut(@PathVariable("documentId") String documentId, @RequestBody DocumentDto body) throws NotFoundException {
 
         if (RestUtils.isJson(request)) {
             Document updatedDocument = null;
             try {
-                lockService.getLock(documentId);
+                lockService.getLock(documentId).equals(null);
             } catch (NullPointerException e) {
                 try {
                     updatedDocument = documentService.updateDocument(documentId, body.toEntity());
                 } catch (NullPointerException f) {
-                    //throw new CustomNotFoundException("Already validated");
+                    throw new NotFoundException("Already validated");
                 }
                 DocumentDto updatedDocumentDto = updatedDocument.toDto();
-                //return new ResponseEntity<DocumentDto>(updatedDocumentDto, HttpStatus.OK);
+                return new ResponseEntity<DocumentDto>(updatedDocumentDto, HttpStatus.OK);
             }
-            //throw new CustomNotFoundException("Document is locked");
+            throw new NotFoundException("Document is locked");
         }
 
-        return null;
-        //throw new CustomNotFoundException("Is not JSON");
+        throw new NotFoundException("Is not JSON");
     }
 
     // PUT DOCUMENT STATUS
