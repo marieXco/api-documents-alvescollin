@@ -1,8 +1,8 @@
 package io.swagger.api;
 
 import io.swagger.dto.DocumentDto;
-import io.swagger.model.Document;
-import io.swagger.model.DocumentsList;
+import io.swagger.exception.NotFoundDocumentException;
+import io.swagger.model.*;
 import io.swagger.service.AddLockService;
 import io.swagger.service.DocumentService;
 import io.swagger.service.LockService;
@@ -44,11 +44,18 @@ public class DocumentApiController {
         if (RestUtils.isJson(request)) {
             Document updatedDocument = documentService.updateDocument(documentId, body.toEntity());
             try {
+                lockService.getLock(documentId);
+            } catch (NullPointerException e) {
+                try {
+                    updatedDocument = documentService.updateDocument(documentId, body.toEntity());
+                } catch (NullPointerException f) {
+                    throw  new NotFoundDocumentException();
+                }
                 DocumentDto updatedDocumentDto = updatedDocument.toDto();
                 return new ResponseEntity<DocumentDto>(updatedDocumentDto, HttpStatus.OK);
-            } catch(NullPointerException e) {
-                return new ResponseEntity<DocumentDto>(HttpStatus.FORBIDDEN);
             }
+            throw  new NotFoundDocumentException();
+
         }
 
         return new ResponseEntity<DocumentDto>(HttpStatus.NOT_IMPLEMENTED);
