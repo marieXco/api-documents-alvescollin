@@ -1,10 +1,19 @@
 package io.swagger.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ErrorDefinition {
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ErrorDefinition extends Throwable {
 
   public enum ErrorTypeEnum {
     TECHNICAL("TECHNICAL"),
@@ -31,6 +40,8 @@ public class ErrorDefinition {
       return null;
     }
   }
+
+
 
   private ErrorTypeEnum errorType;
   private List<ErrorDefinitionErrors> errors;

@@ -1,8 +1,6 @@
 package io.swagger.service;
 
-import io.swagger.model.Document;
-import io.swagger.model.DocumentSummary;
-import io.swagger.model.DocumentsList;
+import io.swagger.model.*;
 import io.swagger.repository.DocumentRepository;
 import io.swagger.utils.DocumentUtils;
 import lombok.RequiredArgsConstructor;
@@ -53,10 +51,10 @@ public class DocumentService {
         return documentRepository.findById(id).orElse(null);
     }
 
-    public Document updateDocument(String id, Document updatedocument){
+    public Document updateDocument(String id, Document updatedocument) {
         Document document = getDocument(id);
-        // TODO : Ajouter editeur + try / catch
-        if(!document.getStatus().equals(Document.StatusEnum.valueOf("VALIDATED")) && lockService.getLock(id).equals(null)) {
+
+        if(!document.getStatus().equals(Document.StatusEnum.valueOf("VALIDATED"))) {
             if(!updatedocument.getBody().equals(null)) document.setBody(updatedocument.getBody());
             if(!updatedocument.getTitle().equals(null)) document.setTitle(updatedocument.getTitle());
 
@@ -64,6 +62,7 @@ public class DocumentService {
         } else {
             return null;
         }
+
     }
 
     public Document updateStatus(String id, Document.StatusEnum status){

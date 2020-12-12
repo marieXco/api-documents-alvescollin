@@ -1,9 +1,8 @@
 package io.swagger.api;
 
 import io.swagger.dto.DocumentDto;
-import io.swagger.model.Document;
-import io.swagger.model.DocumentSummary;
-import io.swagger.model.DocumentsList;
+import io.swagger.errors.CustomNotFoundException;
+import io.swagger.model.*;
 import io.swagger.service.AddLockService;
 import io.swagger.service.DocumentService;
 import io.swagger.service.LockService;
@@ -14,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -40,19 +42,26 @@ public class DocumentApiController {
 
     // PUT DOCUMENT
     @RequestMapping(value = "/documents/{documentId}", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.PUT)
-    public ResponseEntity<DocumentDto> documentsDocumentIdPut(@PathVariable("documentId") String documentId, @RequestBody DocumentDto body) {
+    public ResponseEntity<DocumentDto> documentsDocumentIdPut(@PathVariable("documentId") String documentId, @RequestBody DocumentDto body) throws CustomNotFoundException {
 
         if (RestUtils.isJson(request)) {
-            Document updatedDocument = documentService.updateDocument(documentId, body.toEntity());
+            Document updatedDocument = null;
             try {
+                lockService.getLock(documentId);
+            } catch (NullPointerException e) {
+                try {
+                    updatedDocument = documentService.updateDocument(documentId, body.toEntity());
+                } catch (NullPointerException f) {
+                    //throw new CustomNotFoundException("Already validated");
+                }
                 DocumentDto updatedDocumentDto = updatedDocument.toDto();
-                return new ResponseEntity<DocumentDto>(updatedDocumentDto, HttpStatus.OK);
-            } catch(NullPointerException e) {
-                return new ResponseEntity<DocumentDto>(HttpStatus.FORBIDDEN);
+                //return new ResponseEntity<DocumentDto>(updatedDocumentDto, HttpStatus.OK);
             }
+            //throw new CustomNotFoundException("Document is locked");
         }
 
-        return new ResponseEntity<DocumentDto>(HttpStatus.NOT_IMPLEMENTED);
+        return null;
+        //throw new CustomNotFoundException("Is not JSON");
     }
 
     // PUT DOCUMENT STATUS

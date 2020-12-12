@@ -1,5 +1,8 @@
 package io.swagger.model;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class ErrorDefinitionErrors   {
 
   private String errorCode;
