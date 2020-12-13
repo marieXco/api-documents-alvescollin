@@ -1,4 +1,4 @@
-package io.swagger.api;
+package io.swagger.exception;
 
 public class NotFoundException extends RuntimeException {
 

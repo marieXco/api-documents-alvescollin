@@ -20,7 +20,7 @@ public class DocumentService {
 
     public DocumentSummary createDocument(Document document){
         document.setStatus(Document.StatusEnum.CREATED);
-
+        documentRepository.insert(document);
         // Create a documentSummary for this document
         DocumentSummary documentSummary = DocumentUtils.summarize(document);
 
