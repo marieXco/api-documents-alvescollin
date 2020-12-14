@@ -1,6 +1,5 @@
 package io.swagger.api;
 
-import com.mongodb.MongoWriteException;
 import io.swagger.dto.DocumentDto;
 import io.swagger.exception.BadRequestException;
 import io.swagger.exception.ConflictException;
@@ -38,7 +37,7 @@ public class DocumentApiController {
             try {
                 document.equals(null);
             } catch (NullPointerException e){
-                throw new NotFoundException("Any document with id " + documentId );
+                throw new NotFoundException("Any document with id " + documentId);
             }
             return new ResponseEntity<Document>(document, HttpStatus.FOUND);
         }
@@ -74,6 +73,7 @@ public class DocumentApiController {
     public ResponseEntity<Void> documentsDocumentIdStatusPut(@PathVariable("documentId") String documentId, @RequestBody String body) {
 
         if (RestUtils.isJson(request)) {
+            // TODO : Document.StatusEnum.fromValue(body) peut renvoyer Null Pointer je crois
             if(Document.StatusEnum.fromValue(body) != Document.StatusEnum.valueOf("VALIDATED")) {
                 throw new BadRequestException("The status must be VALIDATED");
             }
@@ -113,7 +113,7 @@ public class DocumentApiController {
                 DocumentSummary createdDocumentSummary = documentService.createDocument(body.toEntity());
                 return new ResponseEntity<DocumentSummary>(createdDocumentSummary, HttpStatus.CREATED);
             }
-            throw new ConflictException("already exist");
+            throw new ConflictException("Already exist");
 
         }
 

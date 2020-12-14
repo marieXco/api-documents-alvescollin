@@ -16,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DocumentService {
     private final DocumentRepository documentRepository;
-    private final LockService lockService;
 
     public DocumentSummary createDocument(Document document){
         document.setStatus(Document.StatusEnum.CREATED);
@@ -53,7 +52,7 @@ public class DocumentService {
 
     public Document updateDocument(String id, Document updatedocument) {
         Document document = getDocument(id);
-
+        // TODO : gérer le vérrou optimiste (Conflict exception) avec @Version
         if(!document.getStatus().equals(Document.StatusEnum.valueOf("VALIDATED"))) {
             if(!updatedocument.getBody().equals(null)) document.setBody(updatedocument.getBody());
             if(!updatedocument.getTitle().equals(null)) document.setTitle(updatedocument.getTitle());

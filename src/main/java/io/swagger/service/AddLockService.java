@@ -11,22 +11,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AddLockService {
-    private final DocumentService documentService;
     private final LockRepository lockRepository;
 
     public Lock addLockOnDocument(String documentId, String user){
-        Document document = documentService.getDocument(documentId);
-        Lock lock = new Lock();
-        Lock lockFound = lockRepository.findLockByDocumentId(documentId);
-        // TODO : lockFound est null
-        if(!document.equals(null)) {
-            if(lockFound.equals(null)) {
-                lock.setOwner(user);
-                lock.setDocumentId(documentId);
-                lock = lockRepository.insert(lock);
-            }
+        try {
+            lockRepository.findLockByDocumentId(documentId).equals(null);
+        } catch (NullPointerException e) {
+            Lock lock = new Lock();
+            lock.setOwner(user);
+            lock.setDocumentId(documentId);
+            lock = lockRepository.insert(lock);
+            return lock;
         }
 
-        return lock;
+        return null;
     }
 }
