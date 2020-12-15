@@ -13,6 +13,20 @@ import org.springframework.stereotype.Service;
 public class LockService {
     private final LockRepository lockRepository;
 
+    public Lock addLockOnDocument(String documentId, String user){
+        try {
+            lockRepository.findLockByDocumentId(documentId).equals(null);
+        } catch (NullPointerException e) {
+            Lock lock = new Lock();
+            lock.setOwner(user);
+            lock.setDocumentId(documentId);
+            lock = lockRepository.insert(lock);
+            return lock;
+        }
+
+        return null;
+    }
+
     public Lock getLock(String documentId){
         return lockRepository.findLockByDocumentId(documentId);
     }

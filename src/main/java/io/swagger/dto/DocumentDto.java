@@ -20,6 +20,7 @@ public class DocumentDto {
     private String title;
     private LocalDateTime created;
     private LocalDateTime updated;
+    private Integer version;
 
     public Document toEntity() {
         return Document.builder()
@@ -28,6 +29,7 @@ public class DocumentDto {
                 .editor(editor)
                 .body(body)
                 .title(title)
+                .version(version)
                 .build();
     }
 

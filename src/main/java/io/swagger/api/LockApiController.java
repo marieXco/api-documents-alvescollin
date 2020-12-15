@@ -5,9 +5,7 @@ import io.swagger.exception.BadRequestException;
 import io.swagger.exception.ConflictException;
 import io.swagger.exception.ForbiddenException;
 import io.swagger.exception.NotFoundException;
-import io.swagger.model.Document;
 import io.swagger.model.Lock;
-import io.swagger.service.AddLockService;
 import io.swagger.service.DocumentService;
 import io.swagger.service.LockService;
 import io.swagger.utils.RestUtils;
@@ -18,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Null;
 
 
 @RestController
@@ -26,73 +23,61 @@ import javax.validation.constraints.Null;
 @Slf4j
 public class LockApiController {
 
-    private final HttpServletRequest request;
     public LockService lockService;
-    public AddLockService addLockService;
     public DocumentService documentService;
 
 
     // DELETE LOCK
-    @RequestMapping(value = "/documents/{documentId}/lock", produces = { "application/json" }, method = RequestMethod.DELETE)
+    @RequestMapping(value = "/documents/{documentId}/lock", produces = {"application/json"}, method = RequestMethod.DELETE)
     public ResponseEntity<Boolean> documentsDocumentIdLockDelete(@PathVariable("documentId") String documentId) {
-        if (RestUtils.isJson(request)) {
-            documentExists(documentId);
+        documentExists(documentId);
 
-            Boolean deleted;
-            try {
-                deleted = lockService.deleteLockOnDocument(documentId, RestUtils.returnLoggedUser());
-            } catch (NullPointerException e) {
-                throw new NotFoundException("There is no lock on this document");
-            }
-
-            if(deleted)  {
-                return new ResponseEntity<Boolean>(HttpStatus.OK);
-            } else {
-                throw new ForbiddenException("You can't delete the lock on this document");
-            }
+        Boolean deleted;
+        try {
+            deleted = lockService.deleteLockOnDocument(documentId, RestUtils.returnLoggedUser());
+        } catch (NullPointerException e) {
+            throw new NotFoundException("There is no lock on this document");
         }
 
-        throw new BadRequestException("Is not JSON");
+        if (deleted) {
+            return new ResponseEntity<Boolean>(HttpStatus.OK);
+        } else {
+            throw new ForbiddenException("You can't delete the lock on this document");
+        }
     }
 
     // GET LOCK
-    @RequestMapping(value = "/documents/{documentId}/lock", produces = { "application/json" }, method = RequestMethod.GET)
+    @RequestMapping(value = "/documents/{documentId}/lock", produces = {"application/json"}, method = RequestMethod.GET)
     public ResponseEntity<LockDto> documentsDocumentIdLockGet(@PathVariable("documentId") String documentId) {
-        if (RestUtils.isJson(request)) {
-            documentExists(documentId);
-            Lock lockedGotten = lockService.getLock(documentId);
 
-            try {
-                lockedGotten.equals(null);
-            } catch (NullPointerException e) {
-                throw new NotFoundException("This document is not locked");
-            }
+        documentExists(documentId);
+        Lock lockedGotten = lockService.getLock(documentId);
 
-            LockDto lockDto = lockedGotten.toDto();
-            return new ResponseEntity<LockDto>(lockDto, HttpStatus.FOUND);
+        try {
+            lockedGotten.equals(null);
+        } catch (NullPointerException e) {
+            throw new NotFoundException("This document is not locked");
         }
 
-        throw new BadRequestException("Is not JSON");
+        LockDto lockDto = lockedGotten.toDto();
+        return new ResponseEntity<LockDto>(lockDto, HttpStatus.FOUND);
     }
 
     // PUT LOCK
-    @RequestMapping(value = "/documents/{documentId}/lock", produces = { "application/json" }, method = RequestMethod.PUT)
+    @RequestMapping(value = "/documents/{documentId}/lock", produces = {"application/json"}, method = RequestMethod.PUT)
     public ResponseEntity<LockDto> documentsDocumentIdLockPut(@PathVariable("documentId") String documentId) {
-        if (RestUtils.isJson(request)) {
-            documentExists(documentId);
 
-            Lock addedLock = addLockService.addLockOnDocument(documentId, RestUtils.returnLoggedUser());
-            try {
-                addedLock.equals(null);
-            } catch (NullPointerException e) {
-                throw new ConflictException("This document is already locked");
-            }
-            LockDto lockDto = addedLock.toDto();
+        documentExists(documentId);
 
-            return new ResponseEntity<LockDto>(lockDto, HttpStatus.CREATED);
+        Lock addedLock = lockService.addLockOnDocument(documentId, RestUtils.returnLoggedUser());
+        try {
+            addedLock.equals(null);
+        } catch (NullPointerException e) {
+            throw new ConflictException("This document is already locked");
         }
+        LockDto lockDto = addedLock.toDto();
 
-        throw new BadRequestException("Is not JSON");
+        return new ResponseEntity<LockDto>(lockDto, HttpStatus.CREATED);
     }
 
     public void documentExists(String documentId) {

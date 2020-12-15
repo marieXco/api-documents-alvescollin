@@ -11,6 +11,7 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
 
 
 @Builder
@@ -37,6 +38,9 @@ public class Document {
   private String title;
 
   private StatusEnum status;
+
+  @Version
+  private Integer version;
 
   public enum StatusEnum {
     CREATED("CREATED"),
@@ -74,6 +78,7 @@ public class Document {
     return status;
   }
 
+
   @Override
   public String toString() {
     return "Document{" +
@@ -84,6 +89,7 @@ public class Document {
             ", created=" + created +
             ", updated=" + updated +
             ", title='" + title + '\'' +
+            ", version='" + version + '\'' +
             ", status=" + status +
             '}';
   }
@@ -97,6 +103,7 @@ public class Document {
             .title(title)
             .created(created)
             .updated(updated)
+            .version(version)
             .build();
   }
 
